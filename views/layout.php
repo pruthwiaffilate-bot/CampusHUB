@@ -11,6 +11,7 @@ $viewIcons = [
     'message' => '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg>',
     'bell' => '<svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>',
     'chart' => '<svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/></svg>',
+    'database' => '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>',
 ];
 ?>
 <!doctype html>
@@ -47,7 +48,7 @@ $viewIcons = [
                 <a class="top-icon" href="index.php?view=notices" aria-label="Notices"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><?php if ($unreadCount > 0 && $role !== 'student'): ?><span class="top-notification-dot"></span><?php endif; ?></a>
                 <div class="top-divider"></div>
                 <div class="user-menu"><span class="user-avatar"><?= e($initials) ?></span><span class="user-meta"><b><?= e($fullName) ?></b><small><?= e(user_role_label($role)) ?></small></span><span class="user-chevron">⌄</span>
-                    <div class="user-dropdown"><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="logout"><button type="submit">Sign out <span>↗</span></button></form></div>
+                    <div class="user-dropdown"><a class="user-dropdown-link" href="index.php?view=profile">My profile <span>↗</span></a><form method="post"><input type="hidden" name="csrf_token" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="logout"><button type="submit">Sign out <span>↗</span></button></form></div>
                 </div>
             </div>
         </header>

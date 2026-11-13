@@ -196,6 +196,14 @@ function require_user(): array
         header('Location: index.php?view=login');
         exit;
     }
+    $statement = db()->prepare('SELECT active FROM users WHERE id = ?');
+    $statement->execute([$user['id']]);
+    if ((int) $statement->fetchColumn() !== 1) {
+        unset($_SESSION['user']);
+        flash('This account is inactive. Contact an administrator for access.');
+        header('Location: index.php?view=login');
+        exit;
+    }
     return $user;
 }
 

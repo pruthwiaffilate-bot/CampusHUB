@@ -96,15 +96,54 @@ These are demo credentials for local evaluation only. Change or remove them befo
 ## Included workflows
 
 - Role-aware sign-in and navigation for administrators, students, faculty, and hostel wardens.
-- Add student and faculty profiles with login accounts.
-- Maintain rooms and capacity; assign students to active rooms without exceeding capacity or creating a second active allocation.
-- End an allocation and retain its history.
+- Add and edit student and faculty profiles, including linked login details.
+- Create administrator and hostel warden accounts; reset passwords and activate/deactivate accounts.
+- Let every signed-in user update their display name or change their password from **My profile** after confirming their current password.
+- Maintain and edit rooms; occupied capacity and room status are checked before changes are saved.
+- Assign students to active rooms without exceeding capacity or creating a second active allocation; end allocations and retain history.
 - Submit private student complaints and update their status as authorized staff.
-- Publish notices to everyone or a selected audience.
+- Publish, edit, and delete notices for everyone or a selected audience.
 - View record summaries and hostel/request reports.
+
+## Database access and data updates
+
+CampusHub connects its PHP pages and forms to the local SQLite database automatically. Submitting an authorized form writes the change to SQLite; reloading the relevant page reads and displays the saved record. Authentication, role permissions, required fields, unique identifiers, and room occupancy rules are checked before updates.
+
+The database contains these application tables:
+
+| Table | Data stored |
+| --- | --- |
+| `users` | Usernames, password hashes, role, active state, and account creation date |
+| `students` | PRN/student ID, course, year, and linked user account |
+| `faculty` | Department, designation, and linked user account |
+| `rooms` | Room number, hostel/building, capacity, and status |
+| `allocations` | Student-room assignments, dates, and active/history status |
+| `complaints` | Student requests, descriptions, status, and timestamps |
+| `notices` | Notice title, message, audience, creator, and publication date |
+
+### Manage records through CampusHub
+
+1. Sign in with an administrator account to access **User accounts** and **Database & backup**.
+2. Use **Students** and **Faculty** to add profiles; choose **Edit** beside a record to update it. Leave an edit form's password field blank to keep that user's current password.
+3. Use **Hostel rooms** to add or edit rooms. A room with active occupants cannot be changed to inactive/maintenance or reduced below its current occupancy. End allocations first if needed.
+4. Use **Room allocations** to assign a student to an available active room or end an existing allocation.
+5. Students submit their own requests on **Complaints & requests**. Administrators and wardens can update complaint status there.
+6. Administrators publish, edit, or delete **Campus notices**. Audience filters control which role groups can view them.
+7. In **User accounts**, create administrator/warden accounts, reset passwords, or deactivate/reactivate accounts. At least one active administrator must remain. Deactivating an account preserves its linked records and prevents further sign-ins.
+8. Use **Reports & insights** or the dashboard to see summaries calculated from the same saved database records.
+
+### View or back up the SQLite database
+
+- Sign in as an administrator and open **Database & backup** to view live row counts for every application table and download a database backup.
+- The database file is `storage/campushub.sqlite`, relative to the project folder (for example, `C:\xampp\htdocs\CampusHUB\storage\campushub.sqlite` under the default XAMPP install path).
+- To inspect or make a direct database change, stop Apache/the PHP server first. Open the `.sqlite` file using DB Browser for SQLite or another SQLite-compatible database viewer. Save changes, close the viewer, then restart CampusHub.
+- Download/install the SQLite viewer before the computer is offline (or transfer its installer to the offline computer). Directly changing IDs, role values, password hashes, or table structure can break account access or application behavior; prefer the CampusHub forms for normal edits.
+- Keep backups in a separate, secure location. A downloaded backup includes personal records and password hashes, so protect it like the original database.
+
+To restore a backup, stop Apache/the PHP server, make a separate copy of the current `storage/campushub.sqlite` if it exists, and replace it with the backup file renamed to `campushub.sqlite`. Keep the `storage/` folder and filename unchanged, then restart the app and verify the restored records.
 
 ## Notes
 
-The interface uses local CSS and system fonts and makes no external font or asset requests, so it remains usable offline. The project synopsis proposes PHP and MySQL for eventual deployment; adapting the schema and connection configuration for the institution's MySQL environment is a separate deployment step.
+The interface uses local CSS and system fonts and makes no external font or asset requests, so it remains usable offline. SQLite is the implemented database for the local app. The project synopsis proposes PHP and MySQL for eventual deployment; adapting the schema and connection configuration for the institution's MySQL environment is a separate deployment step.
 
 The application is a project prototype, not a production-ready student information system. Use real institutional data only after reviewing access policies, HTTPS, backups, account lifecycle, privacy requirements, and deployment security.
